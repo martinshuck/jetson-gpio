@@ -390,6 +390,7 @@ compats_jetson_thor_reference = (
     'nvidia,p3971-0050+p3834-0005',
     'nvidia,p3971-0080+p3834-0008',
     'nvidia,p3971-0089+p3834-0008',
+    'nvidia,p4071-0000+p3834-0008',
 )
 
 
@@ -651,7 +652,7 @@ def get_model():
             warn_if_not_carrier_board('3509', '3768')
             return JETSON_ORIN_NANO
         elif matches(compats_jetson_thor_reference):
-            warn_if_not_carrier_board('3971')
+            warn_if_not_carrier_board('3971', '4071')
             return JETSON_THOR_REFERENCE
 
     # get model info from the environment variables for docker containers
