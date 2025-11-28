@@ -32,6 +32,8 @@ respectively.
 
 # Installation
 
+These are the way to install Jetson.GPIO python modules on your system. For the samples applications, please clone this repository to your system. 
+
 ## Using pip
 
 The easiest way to install this library is using `pip`:
@@ -79,6 +81,23 @@ rules by running:
 ```shell
 sudo udevadm control --reload-rules && sudo udevadm trigger
 ```
+
+# Pinmux Lookup Tool
+
+The `jetson-gpio-pinmux-lookup` command-line tool helps you find the pinmux register address for GPIO pins. This is useful for debugging or setting up pinmux configurations.
+
+**Usage:**
+```shell
+jetson-gpio-pinmux-lookup <gpio_pin_number>
+```
+
+**Example:**
+```shell
+jetson-gpio-pinmux-lookup 7
+# Output on Orin Device: GPIO Pin 7: Mux Register Address = 0x2430070
+```
+
+The tool accepts BOARD mode GPIO pin numbers (1-40) and returns the corresponding pinmux register address in hexadecimal format.
 
 # Running the sample scripts
 
@@ -182,11 +201,17 @@ None.
 It is possible that the GPIO you are trying to use is already being used
 external to the current application. In such a condition, the Jetson GPIO
 library will warn you if the GPIO being used is configured to anything but the
-default direction (input). It will also warn you if you try cleaning up before
-setting up the mode and channels. To disable warnings, call:
+default direction (input). It will also warn you if:
+* You try cleaning up before setting up the mode and channels.
+* (Orin NX/Nano only) The pinmux for a requested pin is not properly confirgured to GPIO and the correct direction.
+
+To disable warnings, call:
 ```python
 GPIO.setwarnings(False)
 ```
+
+Additionally, Jetson.GPIO uses **warnings** module to issue warning. Therefore,
+you can control the warning message using [Python Standard Library - warnings](https://docs.python.org/3/library/warnings.html#the-warnings-filter) 
 
 #### 4. Set up a channel
 
@@ -241,7 +266,7 @@ You can also output to a list or tuple of channels:
 channels = [18, 12, 13] # or use tuples
 GPIO.output(channels, GPIO.HIGH) # or GPIO.LOW
 # set first channel to LOW and rest to HIGH
-GPIO.output(channel, (GPIO.LOW, GPIO.HIGH, GPIO.HIGH))
+GPIO.output(channels, (GPIO.LOW, GPIO.HIGH, GPIO.HIGH))
 ```
 
 #### 7. Clean up
@@ -301,7 +326,7 @@ GPIO.RISING, GPIO.FALLING or GPIO.BOTH. If you only want to limit the wait
 to a specified amount of time, a timeout can be optionally set:
 
 ```python
-# timeout is in milliseconds
+# timeout is in seconds
 GPIO.wait_for_edge(channel, GPIO.RISING, timeout=500)
 ```
 
@@ -363,11 +388,33 @@ multiple events in to a single one, a debounce time can be optionally set:
 GPIO.add_event_detect(channel, GPIO.RISING, callback=callback_fn,
 bouncetime=200)
 ```
+The thread running in the background will be idle waiting for an event until
+timeout, which can be optionally set as the following. The default polling
+timeout is 0.2 sec. When the poll time times out, the thread will wake up and
+check the thread status. If the thread is in the running state, it will go back
+to the idle state waiting for another event, otherwise, the thread will exit
+(event detection removal). This process will go on until the thread is in the
+exit state.
+
+```python
+# polltime set in seconds
+GPIO.add_event_detect(channel, GPIO.RISING, callback=callback_fn,
+polltime=1)
+```
 
 If the edge detection is not longer required it can be removed as follows:
 
 ```python
 GPIO.remove_event_detect(channel)
+```
+
+A timeout option can be set to wait for an event detection
+to be removed, or else it is 0.5 seconds by default. It is
+recommended that the timeout for removal should be at
+least twice as much as the poll time.
+
+```python
+GPIO.remove_event_detect(channel, timeout=0.5)
 ```
 
 #### 10. Check function of GPIO channels
@@ -409,12 +456,11 @@ sudo docker image build -f samples/docker/Dockerfile -t testimg .
 
 ## Running the container
 ### Basic options 
-You should map `/sys/devices`, `/sys/class/gpio` into the container to access to the GPIO pins.
+You should map `/dev` into the container to access to the GPIO pins.
 So you need to add these options to `docker container run` command.
 
 ```shell
--v /sys/devices/:/sys/devices/ \
--v /sys/class/gpio:/sys/class/gpi
+--device /dev/gpiochip0 \
 ```
 
 and if you want to use GPU from the container you also need to add these options:
@@ -434,8 +480,7 @@ sudo docker container run -it --rm \
 --privileged \
 -v /proc/device-tree/compatible:/proc/device-tree/compatible \
 -v /proc/device-tree/chosen:/proc/device-tree/chosen \
--v /sys/devices/:/sys/devices/ \
--v /sys/class/gpio:/sys/class/gpio \
+--device /dev/gpiochip0 \
 testimg /bin/bash
 ```
 
@@ -459,8 +504,7 @@ The following example will run `/bin/bash` from the container in non-privilleged
 ```shell
 sudo docker container run -it --rm \
 --runtime=nvidia --gpus all \
--v /sys/devices/:/sys/devices/ \
--v /sys/class/gpio:/sys/class/gpio \
+--device /dev/gpiochip0 \
 -e JETSON_MODEL_NAME=[PUT_YOUR_JETSON_MODEL_NAME_HERE] \
 testimg /bin/bash
 ```

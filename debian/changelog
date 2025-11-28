@@ -1,3 +1,99 @@
+
+jetson-gpio (2.1.12-0ubuntu1) noble; urgency=medium
+
+  * Add Pinmux Register Address Lookup Tool
+  * Add a warning when the pinmux value is not correct for GPIO Input/Output
+
+ -- Linh Hoang <lhoang@nvidia.com> Tue, 23 Sep 2025 10:17:00 -0700
+
+jetson-gpio (2.1.11-0ubuntu1) noble; urgency=medium
+
+  * Support Jetson Thor Reference SKU80
+  * Support Jetson Thor Reference SKU89
+
+ -- Hiteshkumar Patel <hiteshkumarg@nvidia.com> Sun, 11 May 2025 9:51:00 -0700
+
+jetson-gpio (2.1.10-0ubuntu1) noble; urgency=medium
+
+  * Support Jetson Thor Reference
+
+ -- Hiteshkumar Patel <hiteshkumarg@nvidia.com> Thu, 20 Mar 2025 13:41:00 -0700
+
+jetson-gpio (2.1.9ubuntu1) jammy; urgency=medium
+
+  * Support Jetson Orin Nano and Jetson Orin NX Super
+
+ -- Linh Hoang <lhoang@nvidia.com> Friday, 7 Feb 2025 13:41:00 -0700
+
+
+jetson-gpio (2.1.8ubuntu1) focal; urgency=medium
+
+  * Support Jetson Orin Nano Super
+
+ -- Linh Hoang <lhoang@nvidia.com> Mon, 27 Jan 2025 13:41:00 -0700
+
+jetson-gpio (2.1.7ubuntu1) focal; urgency=medium
+
+  * Add PWM8 to Jetson Orin
+
+ -- Linh Hoang <lhoang@nvidia.com> Mon, 26 Feb 2024 13:41:00 -0700
+
+jetson-gpio (2.1.6ubuntu1) focal; urgency=medium
+
+  * Clean up blocking_wait_for_edge on return
+  * Change the timeout value in the test function as the timeout value is
+    supposed to be in seconds instead of milliseconds
+  * Update the README to correct the timeout unit
+
+ -- Linh Hoang <lhoang@nvidia.com> Tue, 9 Jan 2024 13:41:00 -0700
+
+jetson-gpio (2.1.5ubuntu1) focal; urgency=medium
+
+  * Update README and remove some unnessary warnings
+
+ -- Linh Hoang <lhoang@nvidia.com>  Thu, 15 Nov 2023 16:41:00 -0700
+
+jetson-gpio (2.1.4ubuntu1) focal; urgency=medium
+
+  * Update PWM directory list for new kernel version
+
+ -- Linh Hoang <lhoang@nvidia.com>  Thu, 12 Oct 2023 16:41:00 -0700
+
+jetson-gpio (2.1.3ubuntu1) focal; urgency=medium
+
+  * Add support for more variants of Jetson Orin
+
+ -- Linh Hoang <lhoang@nvidia.com>  Fri, 3 Aug 2023 16:41:00 -0700
+
+jetson-gpio (2.1.2ubuntu1) focal; urgency=medium
+
+  * Add some fixes for character device based implementation of Jetson.GPIO
+  * Update PWM pins list for Jetson Orin NX and Jetson Orin Nano
+  * Add tests for callbacks and epoll object dictionary for parallel events
+  * Update README and multiple comments in the code
+
+ -- Linh Hoang <lhoang@nvidia.com>  Fri, 31 Jul 2023 16:41:00 -0700
+
+jetson-gpio (2.1.1ubuntu1) focal; urgency=medium
+
+  * Add support for Jetson Orin Nano and Jetson Orin NX developer kit
+  * Fix Jetson Nano and Jetson TX1 implementation
+
+ -- Linh Hoang <lhoang@nvidia.com>  Fri, 08 Mar 2023 16:41:00 -0700
+
+jetson-gpio (2.1.0ubuntu1) focal; urgency=medium
+
+  * Switch to character device based implementation of Jetson.GPIO
+
+ -- Linh Hoang <lhoang@nvidia.com>  Fri, 10 Feb 2023 16:41:00 -0700
+
+jetson-gpio (2.0.210ubuntu1) focal; urgency=medium
+
+  * Add support for Jetson Orin NX
+  * Add Docker examples (from from pjueon/docekr-support)
+
+ -- Linh Hoang <lhoang@nvidia.com>  Thu, 06 Dev 2022 16:41:00 -0700
+
 jetson-gpio (2.0.200ubuntu1) focal; urgency=medium
 
   * Add support for Jetson Orin SKU4
